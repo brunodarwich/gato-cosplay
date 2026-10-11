@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Gato Cosplay 🐾 Paper Mario 2.5D</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./src/ui/style.css" />
+  </head>
+  <body>
+    <!-- Container principal com moldura móvel e fundo acolhedor -->
+    <div id="app" class="game-wrapper">
+      <!-- Canvas WebGL 3D do Three.js (Diorama 2.5D) -->
+      <canvas id="three-canvas"></canvas>
+
+      <!-- HUD Overlay (Interface 2D em estilo recorte de papel sobre o 3D) -->
+      <div id="ui-overlay" class="ui-layer">
+        <!-- Zona Superior: Top Bar e Charada compactas no topo -->
+        <div class="top-zone">
+          <header class="top-bar">
+            <div class="brand-badge paper-card">
+              <span class="brand-icon">🐱</span>
+              <span class="brand-title">Gato Cosplay</span>
+            </div>
+
+            <div class="stats-group">
+              <div class="stat-pill paper-card" id="streak-counter" title="Sequência diária">
+                <span class="stat-icon">🐾</span>
+                <span class="stat-value" id="streak-val">1</span>
+              </div>
+              <div class="stat-pill paper-card" id="hint-button-container">
+                <button id="btn-hint" class="icon-btn" title="Pedir Dica">
+                  <span class="stat-icon">💡</span>
+                  <span class="stat-value" id="hint-val">2</span>
+                </button>
+              </div>
+              <button id="btn-sound" class="icon-btn paper-card" title="Alternar Som">
+                <span id="sound-icon">🔊</span>
+              </button>
+            </div>
+          </header>
+
+          <!-- Card da Charada (Envelope Compacto de Papel) -->
+          <section class="riddle-section">
+            <div class="riddle-card paper-sheet" id="riddle-container">
+              <div class="tape-strip top-tape"></div>
+              <div class="riddle-header-row">
+                <span class="riddle-badge">QUEM SOU EU?</span>
+              </div>
+              <p id="riddle-text" class="riddle-text">
+                Carregando desafio...
+              </p>
+              <div class="hint-revealed hidden" id="hint-revealed-box">
+                <span class="hint-tag">Dica Secreta:</span>
+                <span id="hint-revealed-text"></span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Feedback balão de fala do gatinho (posicionado acima da cabeça sem cobrir) -->
+        <div class="cat-dialog-bubble hidden" id="cat-speech">
+          <span id="cat-speech-text">Miau!</span>
+          <div class="bubble-tail"></div>
+        </div>
+
+        <!-- Zona Inferior: Slots ancorados logo acima do Armário de Peças -->
+        <div class="bottom-zone">
+          <!-- Indicador de slots equipados (Cabeça, Corpo, Acessório) -->
+          <div class="slots-indicator-bar" title="Toque no slot vestido para desequipar">
+            <div class="slot-badge paper-card" id="slot-indicator-head" data-slot="head">
+              <span class="slot-icon">👒</span>
+              <div class="slot-info">
+                <span class="slot-label">Cabeça</span>
+                <span class="slot-status" id="status-head">Vazio</span>
+              </div>
+            </div>
+            <div class="slot-badge paper-card" id="slot-indicator-body" data-slot="body">
+              <span class="slot-icon">👘</span>
+              <div class="slot-info">
+                <span class="slot-label">Corpo</span>
+                <span class="slot-status" id="status-body">Vazio</span>
+              </div>
+            </div>
+            <div class="slot-badge paper-card" id="slot-indicator-item" data-slot="item">
+              <span class="slot-icon">🪄</span>
+              <div class="slot-info">
+                <span class="slot-label">Item</span>
+                <span class="slot-status" id="status-item">Vazio</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Painel Inferior: Guarda-Roupa / Gaveta de Adesivos -->
+          <footer class="bottom-panel paper-shelf">
+            <div class="shelf-handle"></div>
+            <div class="shelf-header">
+              <span class="shelf-title">Armário de Peças</span>
+              <button id="btn-clear" class="subtle-btn" title="Tirar todas as peças">↺ Despir</button>
+            </div>
+
+            <div class="inventory-scroller" id="inventory-grid">
+              <!-- Os cards de roupas/adesivos serão injetados aqui -->
+            </div>
+
+            <!-- Botão Principal de Confirmação -->
+            <div class="action-footer">
+              <button id="btn-confirm" class="primary-confirm-btn paper-btn">
+                <span class="btn-stars">✨</span>
+                <span>CONFIRMAR COSPLAY!</span>
+                <span class="btn-stars">✨</span>
+              </button>
+            </div>
+          </footer>
+        </div>
+      </div>
+
+      <!-- Modal da Foto Polaroid 3D (Vitória) -->
+      <div id="polaroid-modal" class="modal-backdrop hidden">
+        <div class="polaroid-frame paper-sheet" id="polaroid-card">
+          <div class="polaroid-pin">📌</div>
+          <div class="polaroid-photo-box" id="polaroid-canvas-box">
+            <!-- Snapshot renderizado -->
+            <div class="polaroid-img-preview" id="polaroid-img-preview">
+              <span class="polaroid-cat-emoji">🐱✨</span>
+            </div>
+          </div>
+          <div class="polaroid-caption">
+            <h3 id="polaroid-char-name">Inuyasha!</h3>
+            <p id="polaroid-anime-name">Inuyasha (Rumiko Takahashi)</p>
+            <p id="polaroid-quote" class="quote-text">"Sente-se, Kagome!"</p>
+            <div class="polaroid-stamp">REVELADO! 🐾</div>
+          </div>
+          <div class="polaroid-actions">
+            <button id="btn-next-level" class="primary-confirm-btn paper-btn">
+              Próximo Cosplay ➔
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

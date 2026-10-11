@@ -1,0 +1,662 @@
+/* ==========================================================================
+   Estilo Visual: Gato Cosplay - 2.5D Paper Mario & Scrapbook Aesthetic
+   ========================================================================== */
+
+:root {
+  --color-bg-desk: #2b2236;
+  --color-paper-light: #fffdf7;
+  --color-paper-card: #f9f5eb;
+  --color-paper-border: #4a3e3d;
+  --color-primary: #ff6584;
+  --color-primary-dark: #e04768;
+  --color-accent-gold: #ffbe3b;
+  --color-accent-cyan: #3bceac;
+  --color-wood-shelf: #e4c59e;
+  --color-text-dark: #2c2523;
+  --color-text-muted: #7d726f;
+  
+  --shadow-paper: 0 4px 0 #3a302f, 0 6px 12px rgba(0, 0, 0, 0.25);
+  --shadow-paper-hover: 0 6px 0 #3a302f, 0 10px 18px rgba(0, 0, 0, 0.3);
+  --shadow-paper-pressed: 0 1px 0 #3a302f, 0 2px 4px rgba(0, 0, 0, 0.2);
+  
+  --font-display: 'Fredoka', cursive, sans-serif;
+  --font-body: 'Quicksand', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg-desk);
+  background-image: 
+    radial-gradient(#40344f 15%, transparent 16%),
+    radial-gradient(#40344f 15%, transparent 16%);
+  background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
+  color: var(--color-text-dark);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Moldura e Wrapper do Jogo (Desktop e Mobile) */
+.game-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  max-width: 460px; /* Proporção 9:16 mobile perfeita em desktop */
+  max-height: 920px;
+  background: #f0e6d6;
+  border: 4px solid var(--color-paper-border);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 8px rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 480px) {
+  .game-wrapper {
+    max-width: 100vw;
+    max-height: 100vh;
+    border-radius: 0;
+    border: none;
+  }
+}
+
+/* Three.js Canvas em tela cheia */
+#three-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: block;
+}
+
+/* UI Overlay */
+.ui-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none; /* Deixa cliques passarem para a cena 3D onde necessário */
+  padding: 10px 12px 10px;
+}
+
+.ui-layer * {
+  pointer-events: auto; /* Reativa cliques nos botões e cards */
+}
+
+/* Zona Superior: Header e Charada integrados e compactos */
+.top-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 20;
+}
+
+/* Top Bar */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: var(--color-paper-light);
+  border: 2px solid var(--color-paper-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-paper);
+}
+
+.brand-icon {
+  font-size: 1.15rem;
+}
+
+.brand-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: var(--color-primary-dark);
+}
+
+.stats-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  background: var(--color-paper-light);
+  border: 2px solid var(--color-paper-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-paper);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+
+.icon-btn.paper-card {
+  padding: 5px 9px;
+  background: var(--color-paper-light);
+  border: 2px solid var(--color-paper-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-paper);
+  font-size: 0.95rem;
+}
+
+.icon-btn.paper-card:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-paper-pressed);
+}
+
+/* Card da Charada (Envelope / Papel Compacto) */
+.riddle-section {
+  z-index: 15;
+}
+
+.riddle-card {
+  position: relative;
+  background: var(--color-paper-light);
+  border: 2.5px solid var(--color-paper-border);
+  border-radius: 14px;
+  padding: 8px 14px 8px;
+  box-shadow: var(--shadow-paper);
+  text-align: center;
+}
+
+.tape-strip {
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 56px;
+  height: 13px;
+  background: rgba(255, 238, 148, 0.8);
+  border: 1px dashed rgba(160, 140, 60, 0.45);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.riddle-header-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3px;
+}
+
+.riddle-badge {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  background: var(--color-primary);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 8px;
+  border: 1.5px solid var(--color-paper-border);
+}
+
+.riddle-text {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #3b2c28;
+}
+
+.hint-revealed {
+  margin-top: 6px;
+  padding: 4px 8px;
+  background: #fff8d6;
+  border: 1.5px dashed #cc9a06;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: #724e03;
+}
+
+.hint-tag {
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+/* Balão de Fala do Gatinho (Posicionado acima da orelha sem cobrir o rosto) */
+.cat-dialog-bubble {
+  position: absolute;
+  top: 24%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  border: 2.5px solid var(--color-paper-border);
+  border-radius: 14px;
+  padding: 6px 14px;
+  box-shadow: var(--shadow-paper);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--color-primary-dark);
+  z-index: 30;
+  white-space: nowrap;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bubble-tail {
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 9px solid var(--color-paper-border);
+}
+
+/* Zona Inferior: Slots ancorados logo acima do armário */
+.bottom-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 25;
+}
+
+/* Indicadores de Slots Equipados */
+.slots-indicator-bar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 26;
+}
+
+.slot-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: rgba(255, 253, 247, 0.95);
+  border: 2px solid var(--color-paper-border);
+  border-radius: 12px;
+  box-shadow: 0 2px 0 #3a302f, 0 3px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  flex: 1;
+  max-width: 130px;
+}
+
+.slot-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 #3a302f, 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.slot-badge:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #3a302f;
+}
+
+.slot-badge .slot-icon {
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.slot-badge .slot-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  min-width: 0;
+}
+
+.slot-label {
+  font-family: var(--font-display);
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  line-height: 1;
+}
+
+.slot-status {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.slot-badge.equipped {
+  background: #f0fdf4;
+  border-color: #10b981;
+  box-shadow: 0 3px 0 #059669, 0 4px 8px rgba(16, 185, 129, 0.2);
+}
+
+.slot-badge.equipped .slot-label {
+  color: #059669;
+}
+
+.slot-badge.equipped .slot-status {
+  color: #065f46;
+}
+
+/* Painel Inferior: Gaveta / Armário de Roupas */
+.bottom-panel {
+  background: var(--color-wood-shelf);
+  border: 3px solid var(--color-paper-border);
+  border-radius: 20px 20px 0 0;
+  padding: 10px 12px 14px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shelf-handle {
+  width: 44px;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  margin: 0 auto;
+}
+
+.shelf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.shelf-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #4a3420;
+}
+
+.subtle-btn {
+  background: none;
+  border: none;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #795548;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.subtle-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Carrossel de Peças */
+.inventory-scroller {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 8px;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.inventory-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+/* Card de Roupa / Peça */
+.item-card {
+  flex: 0 0 74px;
+  height: 86px;
+  background: var(--color-paper-light);
+  border: 2.5px solid var(--color-paper-border);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 4px 5px;
+  box-shadow: var(--shadow-paper);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+}
+
+.item-card:hover {
+  transform: translateY(-3px) rotate(-1deg);
+  box-shadow: var(--shadow-paper-hover);
+}
+
+.item-card:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-paper-pressed);
+}
+
+.item-card.equipped-active {
+  border-color: var(--color-primary);
+  background: #fff0f3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 var(--color-primary-dark), 0 6px 12px rgba(255, 101, 132, 0.3);
+}
+
+.item-card.equipped-active::after {
+  content: '✓';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.75rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-icon-preview {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+
+.item-card-title {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-text-dark);
+  line-height: 1.1;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Botão Principal de Confirmação */
+.action-footer {
+  margin-top: 2px;
+}
+
+.primary-confirm-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(180deg, #ff7b95 0%, #ff5277 100%);
+  border: 3px solid var(--color-paper-border);
+  border-radius: 16px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 5px 0 #9c1f38, 0 8px 14px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.1s ease;
+}
+
+.primary-confirm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 #9c1f38, 0 10px 18px rgba(0, 0, 0, 0.35);
+}
+
+.primary-confirm-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #9c1f38, 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Modal Polaroid 3D de Vitória */
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(20, 15, 25, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.polaroid-frame {
+  position: relative;
+  background: #ffffff;
+  border: 3px solid var(--color-paper-border);
+  border-radius: 8px;
+  padding: 16px 16px 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 5px 0 #3a302f;
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transform: rotate(-2deg);
+  animation: dropPolaroid 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.polaroid-pin {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.4rem;
+  z-index: 2;
+}
+
+.polaroid-photo-box {
+  background: #2b2236;
+  border: 2px solid var(--color-paper-border);
+  border-radius: 4px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.polaroid-cat-emoji {
+  font-size: 5rem;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.4));
+  animation: floatCat 2s ease-in-out infinite;
+}
+
+.polaroid-caption {
+  text-align: center;
+}
+
+.polaroid-caption h3 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--color-text-dark);
+}
+
+.polaroid-caption p {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.quote-text {
+  font-style: italic;
+  color: var(--color-primary-dark) !important;
+  margin-top: 4px;
+}
+
+.polaroid-stamp {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 12px;
+  border: 2px solid #27ae60;
+  color: #27ae60;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  transform: rotate(-6deg);
+}
+
+/* Helpers */
+.hidden {
+  display: none !important;
+}
+
+/* Animações */
+@keyframes popIn {
+  from { transform: translate(-50%, -30%) scale(0.6); opacity: 0; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+@keyframes dropPolaroid {
+  from { transform: translateY(-80px) rotate(8deg) scale(0.8); opacity: 0; }
+  to { transform: translateY(0) rotate(-2deg) scale(1); opacity: 1; }
+}
+
+@keyframes floatCat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}

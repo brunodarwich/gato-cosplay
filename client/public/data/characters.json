@@ -1,0 +1,71 @@
+[
+  {
+    "id": "inuyasha",
+    "name": "Inuyasha",
+    "anime": "Inuyasha",
+    "riddle": "Fui selado em uma árvore sagrada por uma flecha mística até que uma colegial me libertou com um espirro!",
+    "hint": "Carrego sangue meio-youkai, cabelo prateado e uma espada forjada com a presa do meu pai.",
+    "characterQuote": "Sente-se, Kagome!",
+    "requiredPieces": {
+      "head": "inuyasha_head",
+      "body": "inuyasha_body",
+      "item": "inuyasha_item"
+    },
+    "pieceNames": {
+      "inuyasha_head": "Orelhas & Cabelo Prateado",
+      "inuyasha_body": "Quimono Vermelho Hakama",
+      "inuyasha_item": "Espada Tessaiga & Colar"
+    },
+    "distractors": [
+      { "id": "straw_hat", "type": "head", "name": "Chapéu de Palha" },
+      { "id": "shinobi_vest", "type": "body", "name": "Colete Ninja de Konoha" },
+      { "id": "magic_wand", "type": "item", "name": "Cetro da Lua" }
+    ]
+  },
+  {
+    "id": "sailormoon",
+    "name": "Sailor Moon",
+    "anime": "Sailor Moon",
+    "riddle": "Sou uma estudante atrapalhada e chorona que defende o amor e a justiça em nome da Lua!",
+    "hint": "Uso marias-chiquinhas loiras bem longas (odango) e tenho uma gatinha preta companheira com lua na testa.",
+    "characterQuote": "Pelo poder do Prisma Lunar!",
+    "requiredPieces": {
+      "head": "sailormoon_head",
+      "body": "sailormoon_body",
+      "item": "sailormoon_item"
+    },
+    "pieceNames": {
+      "sailormoon_head": "Peruca Loira Odango",
+      "sailormoon_body": "Uniforme Escolar de Marinheira",
+      "sailormoon_item": "Cetro Espiral do Coração Lunar"
+    },
+    "distractors": [
+      { "id": "super_saiyan_hair", "type": "head", "name": "Cabelo Espetado Dourado" },
+      { "id": "inuyasha_body", "type": "body", "name": "Quimono Vermelho Hakama" },
+      { "id": "kunai", "type": "item", "name": "Kunai Ninja" }
+    ]
+  },
+  {
+    "id": "naruto",
+    "name": "Naruto Uzumaki",
+    "anime": "Naruto",
+    "riddle": "Meu grande sonho é me tornar Hokage, amo lámen de porco e carrego uma raposa lendária selada dentro de mim!",
+    "hint": "Visto um agasalho laranja bem chamativo e tenho marquinhas de bigodes nas bochechas.",
+    "characterQuote": "Ttebayo! Eu nunca volto atrás na minha palavra!",
+    "requiredPieces": {
+      "head": "naruto_head",
+      "body": "naruto_body",
+      "item": "naruto_item"
+    },
+    "pieceNames": {
+      "naruto_head": "Bandana da Folha & Cabelo Loiro",
+      "naruto_body": "Agasalho Laranja e Azul",
+      "naruto_item": "Pergaminho Ninja & Kunai"
+    },
+    "distractors": [
+      { "id": "sailormoon_head", "type": "head", "name": "Peruca Loira Odango" },
+      { "id": "pirate_coat", "type": "body", "name": "Capa de Pirata Vermelha" },
+      { "id": "inuyasha_item", "type": "item", "name": "Espada Tessaiga" }
+    ]
+  }
+]
