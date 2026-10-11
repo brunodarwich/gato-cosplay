@@ -4,16 +4,34 @@ export class CameraRig {
   public camera: THREE.PerspectiveCamera;
   private targetRotation = new THREE.Vector2(0, 0);
   private currentRotation = new THREE.Vector2(0, 0);
-  private basePosition = new THREE.Vector3(0, 0.22, 4.65);
+  private basePosition = new THREE.Vector3(0, 0.45, 4.65);
 
   constructor(width: number, height: number) {
     this.camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
+    this.resize(width, height);
     this.camera.position.copy(this.basePosition);
     this.setupParallaxListeners();
   }
 
   public resize(width: number, height: number) {
-    this.camera.aspect = width / height;
+    const aspect = width / height;
+    this.camera.aspect = aspect;
+
+    // Ajuste dinâmico de enquadramento para manter o modelo perfeitamente no vão livre entre a charada e o armário
+    if (aspect < 0.55) {
+      // Telas de celular estreitas/compridas (ex: 9:19.5, 9:20, desktop wrapper padrão 480x900)
+      this.basePosition.set(0, 0.44, 4.85);
+      this.camera.fov = 40;
+    } else if (aspect < 0.72) {
+      // Telas mobile padrão / compactas (ex: 9:16 como iPhone SE, Galaxy A, telas menores)
+      this.basePosition.set(0, 0.35, 5.25);
+      this.camera.fov = 40;
+    } else {
+      // Telas mais largas / janelas quadradas
+      this.basePosition.set(0, 0.36, 5.1);
+      this.camera.fov = 38;
+    }
+
     this.camera.updateProjectionMatrix();
   }
 

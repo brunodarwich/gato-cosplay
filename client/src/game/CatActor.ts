@@ -14,13 +14,14 @@ export class CatActor {
   // Dimensões do plano proporcional ao canvas universal 1024x1024
   private readonly planeWidth = 2.4;
   private readonly planeHeight = 2.4;
+  public readonly baseY = 0.98;
 
   private currentExpression: 'neutral' | 'happy' | 'sad' = 'neutral';
   private expressionTimeout: number | null = null;
 
   constructor() {
     this.group = new THREE.Group();
-    this.group.position.set(0, 0.25, 0);
+    this.group.position.set(0, this.baseY, 0);
 
     const geometry = new THREE.PlaneGeometry(this.planeWidth, this.planeHeight);
 
@@ -231,7 +232,7 @@ export class CatActor {
     return new Promise((resolve) => {
       // 1. Salto animado
       gsap.to(this.group.position, {
-        y: 0.75,
+        y: this.baseY + 0.45,
         duration: 0.45,
         yoyo: true,
         repeat: 1,

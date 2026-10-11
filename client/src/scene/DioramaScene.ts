@@ -103,7 +103,7 @@ export class DioramaScene {
 
     const deskMesh = new THREE.Mesh(deskGeo, deskMat);
     deskMesh.rotation.x = -Math.PI / 2 + 0.15; // leve inclinação para visual isométrico
-    deskMesh.position.set(0, -0.95, 0.2);
+    deskMesh.position.set(0, -0.22, 0.2);
     deskMesh.receiveShadow = true;
     this.scene.add(deskMesh);
 
