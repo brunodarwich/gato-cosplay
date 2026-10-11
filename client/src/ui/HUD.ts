@@ -1,9 +1,12 @@
 import confetti from 'canvas-confetti';
 import { DressUpEngine } from '../game/DressUpEngine';
 import { InventoryItem, SlotType } from '../types';
+import { TextureFactory } from '../scene/TextureFactory';
 
 export class HUD {
   private engine: DressUpEngine;
+  private selectedCategory: 'all' | SlotType = 'all';
+
   private onEquipCallback: (slot: SlotType, pieceId: string) => void;
   private onUnequipCallback: (slot: SlotType) => void;
   private onClearCallback: () => void;
@@ -37,41 +40,72 @@ export class HUD {
   }
 
   private bindEvents() {
+    // Botão Confirmar
     document.getElementById('btn-confirm')?.addEventListener('click', () => {
       this.onConfirmCallback();
     });
 
+    // Botão Despir Tudo
     document.getElementById('btn-clear')?.addEventListener('click', () => {
       this.onClearCallback();
       this.updateSlotBadges();
       this.renderInventory();
     });
 
+    // Botão Próximo Cosplay
     document.getElementById('btn-next-level')?.addEventListener('click', () => {
       this.hidePolaroidModal();
       this.onNextCallback();
     });
 
+    // Botão Dica
     document.getElementById('btn-hint')?.addEventListener('click', () => {
       this.onHintCallback();
     });
 
+    // Botão Som
     document.getElementById('btn-sound')?.addEventListener('click', () => {
       this.onToggleSoundCallback();
     });
 
-    // Toque nos badges de slot para desequipar diretamente
-    ['head', 'body', 'item'].forEach((slotStr) => {
-      const slot = slotStr as SlotType;
+    // Abas de Categoria de Roupa (Todos, Cabeça, Corpo, Item)
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.cat-tab');
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const cat = tab.dataset.category as 'all' | SlotType;
+        this.selectedCategory = cat || 'all';
+        this.renderInventory();
+      });
+    });
+
+    // Toque nos badges de slot ou no botão "✕" para desequipar
+    const slots: SlotType[] = ['head', 'body', 'item'];
+    slots.forEach((slot) => {
+      // Clique no botão ✕ dedicado
+      document.getElementById(`slot-remove-${slot}`)?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.unequipSlot(slot);
+      });
+
+      // Clique no badge geral do slot
       document.getElementById(`slot-indicator-${slot}`)?.addEventListener('click', () => {
         if (this.engine.equippedSlots[slot]) {
-          this.onUnequipCallback(slot);
-          this.engine.unequip(slot);
-          this.updateSlotBadges();
-          this.renderInventory();
+          this.unequipSlot(slot);
         }
       });
     });
+  }
+
+  public unequipSlot(slot: SlotType) {
+    if (this.engine.equippedSlots[slot]) {
+      this.onUnequipCallback(slot);
+      this.engine.unequip(slot);
+      this.updateSlotBadges();
+      this.renderInventory();
+    }
   }
 
   public renderRound() {
@@ -86,7 +120,15 @@ export class HUD {
     const hintBox = document.getElementById('hint-revealed-box');
     if (hintBox) hintBox.classList.add('hidden');
 
-    // Atualiza contadores
+    // Volta a aba para 'all'
+    this.selectedCategory = 'all';
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.cat-tab');
+    tabs.forEach((tab) => {
+      if (tab.dataset.category === 'all') tab.classList.add('active');
+      else tab.classList.remove('active');
+    });
+
+    // Atualiza contadores e interface
     this.updateCounters();
     this.updateSlotBadges();
     this.renderInventory();
@@ -103,23 +145,44 @@ export class HUD {
   public updateSlotBadges() {
     const slots: SlotType[] = ['head', 'body', 'item'];
 
+    const defaultIcons: Record<SlotType, string> = {
+      head: '👒',
+      body: '👘',
+      item: '🪄'
+    };
+
     slots.forEach((slot) => {
       const badge = document.getElementById(`slot-indicator-${slot}`);
+      const thumbBox = document.getElementById(`slot-thumb-${slot}`);
       const statusText = document.getElementById(`status-${slot}`);
+      const removeBtn = document.getElementById(`slot-remove-${slot}`);
+
       const pieceId = this.engine.equippedSlots[slot];
       const isEquipped = !!pieceId;
 
-      if (badge && statusText) {
-        if (isEquipped) {
-          badge.classList.add('equipped');
-          const equippedItem = this.engine.currentInventory.find((i) => i.id === pieceId);
-          statusText.textContent = equippedItem ? `${equippedItem.name} ✓` : 'Vestido ✓';
-          badge.title = `Vestido com ${equippedItem ? equippedItem.name : 'peça'}. Clique para desequipar.`;
-        } else {
-          badge.classList.remove('equipped');
-          statusText.textContent = 'Vazio';
-          badge.title = `Slot ${slot === 'head' ? 'de cabeça' : slot === 'body' ? 'de corpo' : 'de item'} vazio`;
-        }
+      if (!badge || !thumbBox || !statusText) return;
+
+      if (isEquipped) {
+        badge.classList.add('equipped');
+        removeBtn?.classList.remove('hidden');
+
+        const equippedItem = this.engine.currentInventory.find((i) => i.id === pieceId);
+        statusText.textContent = equippedItem ? equippedItem.name : 'Equipado';
+        badge.title = `Vestido com ${equippedItem ? equippedItem.name : 'peça'}. Clique para desequipar.`;
+
+        // Coloca a miniatura real da peça no badge
+        thumbBox.innerHTML = `
+          <img src="${TextureFactory.getThumbUrl(pieceId!)}" 
+               alt="${pieceId}" 
+               class="slot-thumb-img" 
+               onerror="this.outerHTML='<span class=\"slot-icon\">${defaultIcons[slot]}</span>'" />
+        `;
+      } else {
+        badge.classList.remove('equipped');
+        removeBtn?.classList.add('hidden');
+        statusText.textContent = 'Vazio';
+        badge.title = `Slot de ${slot === 'head' ? 'cabeça' : slot === 'body' ? 'corpo' : 'item'} vazio`;
+        thumbBox.innerHTML = `<span class="slot-icon">${defaultIcons[slot]}</span>`;
       }
     });
   }
@@ -130,7 +193,33 @@ export class HUD {
 
     container.innerHTML = '';
 
-    this.engine.currentInventory.forEach((item: InventoryItem) => {
+    // Filtra pela categoria selecionada
+    const items = this.engine.currentInventory.filter((item) => {
+      if (this.selectedCategory === 'all') return true;
+      return item.type === this.selectedCategory;
+    });
+
+    if (items.length === 0) {
+      const emptyMsg = document.createElement('div');
+      emptyMsg.className = 'empty-inventory-msg';
+      emptyMsg.textContent = 'Nenhuma peça nesta categoria!';
+      container.appendChild(emptyMsg);
+      return;
+    }
+
+    const typeLabels: Record<SlotType, string> = {
+      head: 'Cabeça',
+      body: 'Roupa',
+      item: 'Acessório'
+    };
+
+    const typeEmojis: Record<SlotType, string> = {
+      head: '👒',
+      body: '👘',
+      item: '🪄'
+    };
+
+    items.forEach((item: InventoryItem) => {
       const card = document.createElement('div');
       card.className = 'item-card';
 
@@ -139,25 +228,26 @@ export class HUD {
         card.classList.add('equipped-active');
       }
 
-      // Ícone emoji correspondente
-      let icon = '👒';
-      if (item.type === 'body') icon = '👘';
-      if (item.type === 'item') icon = '🗡️';
-      if (item.id.includes('wand')) icon = '🪄';
-      if (item.id.includes('hat')) icon = '👒';
-
       card.innerHTML = `
-        <div class="item-icon-preview">${icon}</div>
+        <div class="item-thumb-wrapper">
+          <img src="${TextureFactory.getThumbUrl(item.id)}" 
+               alt="${item.name}" 
+               class="item-thumb-img" 
+               loading="lazy"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <span class="item-emoji-fallback" style="display:none;">${typeEmojis[item.type]}</span>
+        </div>
         <div class="item-card-title">${item.name}</div>
+        <span class="item-type-pill item-pill-${item.type}">${typeLabels[item.type]}</span>
       `;
 
       card.addEventListener('click', () => {
         if (isEquipped) {
-          // Se já está equipado, tira
+          // Já está equipado -> remove
           this.engine.unequip(item.type);
           this.onUnequipCallback(item.type);
         } else {
-          // Equipa
+          // Equipa a nova peça
           this.engine.equip(item.type, item.id);
           this.onEquipCallback(item.type, item.id);
         }
@@ -169,7 +259,7 @@ export class HUD {
     });
   }
 
-  public showCatSpeech(text: string, durationMs = 2000) {
+  public showCatSpeech(text: string, durationMs = 2200) {
     const speech = document.getElementById('cat-speech');
     const speechText = document.getElementById('cat-speech-text');
     if (speech && speechText) {
@@ -210,10 +300,10 @@ export class HUD {
 
     // Confetes festivos de papel em 3D
     confetti({
-      particleCount: 80,
-      spread: 70,
+      particleCount: 90,
+      spread: 75,
       origin: { y: 0.6 },
-      colors: ['#ff6584', '#ffbe3b', '#3bceac', '#ffffff', '#e04768']
+      colors: ['#ff6584', '#ffbe3b', '#3bceac', '#ffffff', '#e04768', '#48dbfb']
     });
   }
 

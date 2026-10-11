@@ -53,7 +53,7 @@ body {
   position: relative;
   width: 100vw;
   height: 100vh;
-  max-width: 460px; /* Proporção 9:16 mobile perfeita em desktop */
+  max-width: 480px; /* Proporção mobile ideal em desktop */
   max-height: 920px;
   background: #f0e6d6;
   border: 4px solid var(--color-paper-border);
@@ -80,6 +80,7 @@ body {
   height: 100%;
   z-index: 1;
   display: block;
+  cursor: pointer;
 }
 
 /* UI Overlay */
@@ -93,15 +94,15 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  pointer-events: none; /* Deixa cliques passarem para a cena 3D onde necessário */
-  padding: 10px 12px 10px;
+  pointer-events: none;
+  padding: 8px 10px 8px;
 }
 
 .ui-layer * {
-  pointer-events: auto; /* Reativa cliques nos botões e cards */
+  pointer-events: auto;
 }
 
-/* Zona Superior: Header e Charada integrados e compactos */
+/* Zona Superior: Header e Charada integrados */
 .top-zone {
   display: flex;
   flex-direction: column;
@@ -121,7 +122,7 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 12px;
+  padding: 4px 10px;
   background: var(--color-paper-light);
   border: 2px solid var(--color-paper-border);
   border-radius: 14px;
@@ -135,7 +136,7 @@ body {
 .brand-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.98rem;
+  font-size: 0.95rem;
   color: var(--color-primary-dark);
 }
 
@@ -149,14 +150,14 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 5px 10px;
+  padding: 4px 8px;
   background: var(--color-paper-light);
   border: 2px solid var(--color-paper-border);
   border-radius: 14px;
   box-shadow: var(--shadow-paper);
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .icon-btn {
@@ -172,12 +173,13 @@ body {
 }
 
 .icon-btn.paper-card {
-  padding: 5px 9px;
+  padding: 4px 8px;
   background: var(--color-paper-light);
   border: 2px solid var(--color-paper-border);
   border-radius: 14px;
   box-shadow: var(--shadow-paper);
   font-size: 0.95rem;
+  transition: transform 0.1s ease;
 }
 
 .icon-btn.paper-card:active {
@@ -185,7 +187,7 @@ body {
   box-shadow: var(--shadow-paper-pressed);
 }
 
-/* Card da Charada (Envelope / Papel Compacto) */
+/* Card da Charada (Envelope de Papel) */
 .riddle-section {
   z-index: 15;
 }
@@ -195,19 +197,19 @@ body {
   background: var(--color-paper-light);
   border: 2.5px solid var(--color-paper-border);
   border-radius: 14px;
-  padding: 8px 14px 8px;
+  padding: 7px 12px 7px;
   box-shadow: var(--shadow-paper);
   text-align: center;
 }
 
 .tape-strip {
   position: absolute;
-  top: -7px;
+  top: -6px;
   left: 50%;
   transform: translateX(-50%) rotate(-1deg);
-  width: 56px;
-  height: 13px;
-  background: rgba(255, 238, 148, 0.8);
+  width: 52px;
+  height: 12px;
+  background: rgba(255, 238, 148, 0.85);
   border: 1px dashed rgba(160, 140, 60, 0.45);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
@@ -215,37 +217,37 @@ body {
 .riddle-header-row {
   display: flex;
   justify-content: center;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 
 .riddle-badge {
   display: inline-block;
   font-family: var(--font-display);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.5px;
   font-weight: 700;
   background: var(--color-primary);
   color: #fff;
-  padding: 2px 8px;
+  padding: 2px 7px;
   border-radius: 8px;
   border: 1.5px solid var(--color-paper-border);
 }
 
 .riddle-text {
   font-family: var(--font-body);
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 700;
   line-height: 1.25;
   color: #3b2c28;
 }
 
 .hint-revealed {
-  margin-top: 6px;
+  margin-top: 5px;
   padding: 4px 8px;
   background: #fff8d6;
   border: 1.5px dashed #cc9a06;
   border-radius: 8px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: #724e03;
 }
 
@@ -254,10 +256,10 @@ body {
   margin-right: 4px;
 }
 
-/* Balão de Fala do Gatinho (Posicionado acima da orelha sem cobrir o rosto) */
+/* Balão de Fala do Gatinho */
 .cat-dialog-bubble {
   position: absolute;
-  top: 24%;
+  top: 23%;
   left: 50%;
   transform: translateX(-50%);
   background: #ffffff;
@@ -290,7 +292,7 @@ body {
 .bottom-zone {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   z-index: 25;
 }
 
@@ -298,7 +300,7 @@ body {
 .slots-indicator-bar {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   z-index: 26;
 }
 
@@ -306,7 +308,7 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 12px;
+  padding: 4px 8px;
   background: rgba(255, 253, 247, 0.95);
   border: 2px solid var(--color-paper-border);
   border-radius: 12px;
@@ -314,7 +316,8 @@ body {
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   flex: 1;
-  max-width: 130px;
+  min-width: 0;
+  position: relative;
 }
 
 .slot-badge:hover {
@@ -322,14 +325,28 @@ body {
   box-shadow: 0 4px 0 #3a302f, 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
-.slot-badge:active {
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 #3a302f;
+.slot-thumb-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #f1ebd9;
+  border: 1.5px solid var(--color-paper-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.slot-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
 .slot-badge .slot-icon {
   font-size: 1.15rem;
-  flex-shrink: 0;
 }
 
 .slot-badge .slot-info {
@@ -337,11 +354,12 @@ body {
   flex-direction: column;
   text-align: left;
   min-width: 0;
+  flex: 1;
 }
 
 .slot-label {
   font-family: var(--font-display);
-  font-size: 0.64rem;
+  font-size: 0.62rem;
   font-weight: 600;
   color: var(--color-text-muted);
   line-height: 1;
@@ -349,13 +367,36 @@ body {
 
 .slot-status {
   font-family: var(--font-body);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: var(--color-text-dark);
   line-height: 1.15;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.slot-remove-btn {
+  background: #ff4757;
+  color: #fff;
+  border: 1.5px solid var(--color-paper-border);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2px;
+  flex-shrink: 0;
+  transition: transform 0.1s ease;
+}
+
+.slot-remove-btn:hover {
+  transform: scale(1.15);
+  background: #e04050;
 }
 
 .slot-badge.equipped {
@@ -372,25 +413,25 @@ body {
   color: #065f46;
 }
 
-/* Painel Inferior: Gaveta / Armário de Roupas */
+/* Painel Inferior: Gaveta de Roupas */
 .bottom-panel {
   background: var(--color-wood-shelf);
   border: 3px solid var(--color-paper-border);
   border-radius: 20px 20px 0 0;
-  padding: 10px 12px 14px;
+  padding: 8px 10px 10px;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
   z-index: 25;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .shelf-handle {
-  width: 44px;
-  height: 5px;
+  width: 40px;
+  height: 4px;
   background: rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
-  margin: 0 auto;
+  border-radius: 2px;
+  margin: 0 auto 2px;
 }
 
 .shelf-header {
@@ -402,44 +443,102 @@ body {
 .shelf-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: #4a3420;
 }
 
 .subtle-btn {
-  background: none;
-  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1.5px solid var(--color-paper-border);
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 0.8rem;
-  color: #795548;
+  font-size: 0.74rem;
+  color: #5d4037;
   cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 6px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  box-shadow: 0 1px 0 #4a3e3d;
+  transition: all 0.1s ease;
 }
 
 .subtle-btn:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.subtle-btn:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* Abas de Categorias (Chips de Papel) */
+.category-tabs {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.category-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-tab {
+  background: #fdfaf2;
+  border: 2px solid var(--color-paper-border);
+  border-radius: 10px;
+  padding: 3px 9px;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 2px 0 #3a302f;
+  transition: all 0.15s ease;
+}
+
+.cat-tab:hover {
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.cat-tab.active {
+  background: var(--color-primary);
+  color: #ffffff;
+  border-color: #2c2523;
+  box-shadow: 0 2px 0 #9c1f38;
 }
 
 /* Carrossel de Peças */
 .inventory-scroller {
   display: flex;
-  gap: 8px;
+  gap: 7px;
   overflow-x: auto;
-  padding: 4px 2px 8px;
+  padding: 4px 2px 6px;
   scroll-behavior: smooth;
   scrollbar-width: none;
+  min-height: 98px;
 }
 
 .inventory-scroller::-webkit-scrollbar {
   display: none;
 }
 
+.empty-inventory-msg {
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  color: #6d4c41;
+  padding: 20px 0;
+}
+
 /* Card de Roupa / Peça */
 .item-card {
-  flex: 0 0 74px;
-  height: 86px;
+  flex: 0 0 76px;
+  height: 94px;
   background: var(--color-paper-light);
   border: 2.5px solid var(--color-paper-border);
   border-radius: 14px;
@@ -447,10 +546,10 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 4px 5px;
+  padding: 5px 3px 4px;
   box-shadow: var(--shadow-paper);
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   position: relative;
 }
 
@@ -465,10 +564,10 @@ body {
 }
 
 .item-card.equipped-active {
-  border-color: var(--color-primary);
-  background: #fff0f3;
+  border-color: #10b981;
+  background: #f0fdf4;
   transform: translateY(-2px);
-  box-shadow: 0 4px 0 var(--color-primary-dark), 0 6px 12px rgba(255, 101, 132, 0.3);
+  box-shadow: 0 4px 0 #059669, 0 6px 12px rgba(16, 185, 129, 0.3);
 }
 
 .item-card.equipped-active::after {
@@ -476,10 +575,10 @@ body {
   position: absolute;
   top: -6px;
   right: -6px;
-  background: var(--color-primary);
+  background: #10b981;
   color: #fff;
   font-weight: 700;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -487,20 +586,37 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.item-icon-preview {
+.item-thumb-wrapper {
   width: 48px;
   height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+.item-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.item-card:hover .item-thumb-img {
+  transform: scale(1.1);
+}
+
+.item-emoji-fallback {
   font-size: 1.8rem;
 }
 
 .item-card-title {
   font-family: var(--font-body);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
   text-align: center;
   color: var(--color-text-dark);
@@ -511,23 +627,37 @@ body {
   white-space: nowrap;
 }
 
+.item-type-pill {
+  font-family: var(--font-display);
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--color-paper-border);
+  line-height: 1.1;
+}
+
+.item-pill-head { background: #ffeaa7; color: #6d4c41; }
+.item-pill-body { background: #dfe6e9; color: #2d3436; }
+.item-pill-item { background: #e8d7ff; color: #4a148c; }
+
 /* Botão Principal de Confirmação */
 .action-footer {
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .primary-confirm-btn {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   background: linear-gradient(180deg, #ff7b95 0%, #ff5277 100%);
   border: 3px solid var(--color-paper-border);
-  border-radius: 16px;
+  border-radius: 14px;
   color: #fff;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1rem;
   letter-spacing: 0.5px;
-  box-shadow: 0 5px 0 #9c1f38, 0 8px 14px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 0 #9c1f38, 0 8px 14px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -538,11 +668,11 @@ body {
 
 .primary-confirm-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 7px 0 #9c1f38, 0 10px 18px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 6px 0 #9c1f38, 0 10px 18px rgba(0, 0, 0, 0.35);
 }
 
 .primary-confirm-btn:active {
-  transform: translateY(4px);
+  transform: translateY(3px);
   box-shadow: 0 1px 0 #9c1f38, 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
@@ -567,7 +697,7 @@ body {
   background: #ffffff;
   border: 3px solid var(--color-paper-border);
   border-radius: 8px;
-  padding: 16px 16px 20px;
+  padding: 16px 16px 18px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 5px 0 #3a302f;
   width: 100%;
   max-width: 320px;
@@ -591,7 +721,7 @@ body {
   background: #2b2236;
   border: 2px solid var(--color-paper-border);
   border-radius: 4px;
-  height: 200px;
+  height: 190px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -600,7 +730,7 @@ body {
 }
 
 .polaroid-cat-emoji {
-  font-size: 5rem;
+  font-size: 4.8rem;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.4));
   animation: floatCat 2s ease-in-out infinite;
 }
@@ -611,12 +741,12 @@ body {
 
 .polaroid-caption h3 {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   color: var(--color-text-dark);
 }
 
 .polaroid-caption p {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--color-text-muted);
   font-weight: 600;
 }
@@ -629,13 +759,13 @@ body {
 
 .polaroid-stamp {
   display: inline-block;
-  margin-top: 8px;
-  padding: 4px 12px;
+  margin-top: 6px;
+  padding: 3px 12px;
   border: 2px solid #27ae60;
   color: #27ae60;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   border-radius: 6px;
   transform: rotate(-6deg);
 }

@@ -46,10 +46,10 @@ async function bootstrap() {
       if (result.isVictory) {
         // VITÓRIA!
         audio.playVictoryJingle();
-        hud.showCatSpeech('MIAU! VOCÊ ACERTOU! 🎉', 3000);
+        hud.showCatSpeech('MIAU! VOCÊ ACERTOU! 🎉', 3200);
         engine.streak++;
 
-        // Executa a animação de salto + giro 360° em moeda
+        // Executa a animação de salto + giro 360° com expressão feliz da Cris
         await diorama.catActor.playVictoryAnimation();
 
         // Toca som de câmera e abre o Polaroid 3D
@@ -93,6 +93,21 @@ async function bootstrap() {
       hud.updateSoundIcon(isMuted);
     }
   });
+
+  // 5. Interação direta com a cena 3D (toque no gatinho ou nas peças)
+  diorama.onMeshClick = (type: 'cat' | 'piece', slot?: SlotType) => {
+    if (type === 'cat') {
+      audio.playEquipSound();
+      hud.showCatSpeech('Purr... Miau! Adoro carinho! 🐾💕', 1800);
+    } else if (type === 'piece' && slot) {
+      diorama.catActor.unequipPiece(slot);
+      engine.unequip(slot);
+      audio.playUnequipSound();
+      hud.updateSlotBadges();
+      hud.renderInventory();
+      hud.showCatSpeech('Tirei essa peça! 🐾', 1500);
+    }
+  };
 
   // Renderiza a primeira rodada
   hud.renderRound();

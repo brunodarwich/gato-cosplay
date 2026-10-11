@@ -26,7 +26,7 @@
             </div>
 
             <div class="stats-group">
-              <div class="stat-pill paper-card" id="streak-counter" title="Sequência diária">
+              <div class="stat-pill paper-card" id="streak-counter" title="Sequência de Vitórias">
                 <span class="stat-icon">🐾</span>
                 <span class="stat-value" id="streak-val">1</span>
               </div>
@@ -60,7 +60,7 @@
           </section>
         </div>
 
-        <!-- Feedback balão de fala do gatinho (posicionado acima da cabeça sem cobrir) -->
+        <!-- Feedback balão de fala do gatinho -->
         <div class="cat-dialog-bubble hidden" id="cat-speech">
           <span id="cat-speech-text">Miau!</span>
           <div class="bubble-tail"></div>
@@ -71,34 +71,54 @@
           <!-- Indicador de slots equipados (Cabeça, Corpo, Acessório) -->
           <div class="slots-indicator-bar" title="Toque no slot vestido para desequipar">
             <div class="slot-badge paper-card" id="slot-indicator-head" data-slot="head">
-              <span class="slot-icon">👒</span>
+              <div class="slot-thumb-box" id="slot-thumb-head">
+                <span class="slot-icon">👒</span>
+              </div>
               <div class="slot-info">
                 <span class="slot-label">Cabeça</span>
                 <span class="slot-status" id="status-head">Vazio</span>
               </div>
+              <button class="slot-remove-btn hidden" id="slot-remove-head" title="Remover peruca/chapéu">✕</button>
             </div>
+
             <div class="slot-badge paper-card" id="slot-indicator-body" data-slot="body">
-              <span class="slot-icon">👘</span>
+              <div class="slot-thumb-box" id="slot-thumb-body">
+                <span class="slot-icon">👘</span>
+              </div>
               <div class="slot-info">
                 <span class="slot-label">Corpo</span>
                 <span class="slot-status" id="status-body">Vazio</span>
               </div>
+              <button class="slot-remove-btn hidden" id="slot-remove-body" title="Remover roupa">✕</button>
             </div>
+
             <div class="slot-badge paper-card" id="slot-indicator-item" data-slot="item">
-              <span class="slot-icon">🪄</span>
+              <div class="slot-thumb-box" id="slot-thumb-item">
+                <span class="slot-icon">🪄</span>
+              </div>
               <div class="slot-info">
                 <span class="slot-label">Item</span>
                 <span class="slot-status" id="status-item">Vazio</span>
               </div>
+              <button class="slot-remove-btn hidden" id="slot-remove-item" title="Remover acessório">✕</button>
             </div>
           </div>
 
           <!-- Painel Inferior: Guarda-Roupa / Gaveta de Adesivos -->
           <footer class="bottom-panel paper-shelf">
             <div class="shelf-handle"></div>
+            
             <div class="shelf-header">
               <span class="shelf-title">Armário de Peças</span>
-              <button id="btn-clear" class="subtle-btn" title="Tirar todas as peças">↺ Despir</button>
+              <button id="btn-clear" class="subtle-btn" title="Tirar todas as peças">↺ Despir Tudo</button>
+            </div>
+
+            <!-- Abas de Filtro por Categoria -->
+            <div class="category-tabs" id="category-tabs">
+              <button class="cat-tab active" data-category="all">✨ Todas</button>
+              <button class="cat-tab" data-category="head">👒 Cabeça</button>
+              <button class="cat-tab" data-category="body">👘 Roupa</button>
+              <button class="cat-tab" data-category="item">🪄 Item</button>
             </div>
 
             <div class="inventory-scroller" id="inventory-grid">
@@ -122,14 +142,13 @@
         <div class="polaroid-frame paper-sheet" id="polaroid-card">
           <div class="polaroid-pin">📌</div>
           <div class="polaroid-photo-box" id="polaroid-canvas-box">
-            <!-- Snapshot renderizado -->
             <div class="polaroid-img-preview" id="polaroid-img-preview">
               <span class="polaroid-cat-emoji">🐱✨</span>
             </div>
           </div>
           <div class="polaroid-caption">
             <h3 id="polaroid-char-name">Inuyasha!</h3>
-            <p id="polaroid-anime-name">Inuyasha (Rumiko Takahashi)</p>
+            <p id="polaroid-anime-name">Inuyasha</p>
             <p id="polaroid-quote" class="quote-text">"Sente-se, Kagome!"</p>
             <div class="polaroid-stamp">REVELADO! 🐾</div>
           </div>

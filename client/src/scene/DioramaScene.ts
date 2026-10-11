@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { CameraRig } from './CameraRig';
 import { TextureFactory } from './TextureFactory';
 import { CatActor } from '../game/CatActor';
+import { SlotType } from '../types';
 
 export class DioramaScene {
   public scene: THREE.Scene;
@@ -11,12 +12,16 @@ export class DioramaScene {
 
   private clock = new THREE.Clock();
   private canvas: HTMLCanvasElement;
+  private raycaster = new THREE.Raycaster();
+  private pointer = new THREE.Vector2();
+
+  public onMeshClick?: (type: 'cat' | 'piece', slot?: SlotType, pieceId?: string) => void;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.scene = new THREE.Scene();
 
-    // Fundo acolhedor estilo quarto/mesa artesanal
+    // Fundo acolhedor estilo quarto / mesa artesanal
     this.scene.background = new THREE.Color(0xf6efe6);
     this.scene.fog = new THREE.FogExp2(0xf6efe6, 0.08);
 
@@ -33,7 +38,7 @@ export class DioramaScene {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.1;
 
-    // Câmera 3D com rig de giroscópio
+    // Câmera 3D com rig de giroscópio e paralaxe suave
     const width = this.canvas.clientWidth || window.innerWidth;
     const height = this.canvas.clientHeight || window.innerHeight;
     this.renderer.setSize(width, height, false);
@@ -42,12 +47,15 @@ export class DioramaScene {
     // Luzes
     this.setupLighting();
 
-    // Elementos de Cenário (Parede e Chão de Papel / Feltro)
+    // Elementos de Cenário
     this.setupScenery();
 
     // Mascote Felino
     this.catActor = new CatActor();
     this.scene.add(this.catActor.group);
+
+    // Interações de clique 3D
+    this.setupInteractions();
 
     // Listeners de Redimensionamento
     window.addEventListener('resize', () => this.handleResize());
@@ -59,10 +67,10 @@ export class DioramaScene {
 
   private setupLighting() {
     // 1. Luz Ambiente suave e quente
-    const ambientLight = new THREE.AmbientLight(0xfff6ec, 1.2);
+    const ambientLight = new THREE.AmbientLight(0xfff6ec, 1.25);
     this.scene.add(ambientLight);
 
-    // 2. Luz Direcional principal simulando uma luminária de mesa (Paper Shadows)
+    // 2. Luz Direcional principal simulando luminária de mesa (Paper Shadows)
     const dirLight = new THREE.DirectionalLight(0xffeed6, 1.6);
     dirLight.position.set(2.5, 4.0, 3.5);
     dirLight.castShadow = true;
@@ -77,7 +85,7 @@ export class DioramaScene {
     dirLight.shadow.bias = -0.0005;
     this.scene.add(dirLight);
 
-    // 3. Luz de preenchimento suave azulada no lado oposto para contraste
+    // 3. Luz de preenchimento azulada no lado oposto para contraste artístico
     const fillLight = new THREE.DirectionalLight(0xcde6ff, 0.45);
     fillLight.position.set(-3.0, 2.0, 2.0);
     this.scene.add(fillLight);
@@ -94,12 +102,12 @@ export class DioramaScene {
     });
 
     const deskMesh = new THREE.Mesh(deskGeo, deskMat);
-    deskMesh.rotation.x = -Math.PI / 2 + 0.15; // leve inclinação para visual isométrico confortável
+    deskMesh.rotation.x = -Math.PI / 2 + 0.15; // leve inclinação para visual isométrico
     deskMesh.position.set(0, -0.95, 0.2);
     deskMesh.receiveShadow = true;
     this.scene.add(deskMesh);
 
-    // Parede de fundo do diorama (com textura de papel quadriculado fofo)
+    // Parede de fundo do diorama
     const wallGeo = new THREE.PlaneGeometry(10, 10);
     const wallMat = new THREE.MeshStandardMaterial({
       color: 0xfaebd7,
@@ -110,6 +118,34 @@ export class DioramaScene {
     wallMesh.position.set(0, 1.5, -1.8);
     wallMesh.receiveShadow = true;
     this.scene.add(wallMesh);
+  }
+
+  private setupInteractions() {
+    this.canvas.addEventListener('pointerdown', (e) => {
+      const rect = this.canvas.getBoundingClientRect();
+      this.pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      this.pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+      this.raycaster.setFromCamera(this.pointer, this.cameraRig.camera);
+
+      // Checa colisões com as partes do gatinho e roupas
+      const intersects = this.raycaster.intersectObjects(this.catActor.group.children, true);
+
+      if (intersects.length > 0) {
+        // Ordena por maior profundidade z para priorizar peças superiores
+        const hit = intersects[0];
+        const obj = hit.object;
+
+        if (obj.userData?.slot) {
+          // Clicou numa peça equipada
+          this.onMeshClick?.('piece', obj.userData.slot, obj.userData.pieceId);
+        } else if (obj.userData?.isCat) {
+          // Clicou no gatinho
+          this.catActor.playPetAnimation();
+          this.onMeshClick?.('cat');
+        }
+      }
+    });
   }
 
   public handleResize() {
